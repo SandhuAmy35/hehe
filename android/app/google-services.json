@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "534325840294",
+    "project_id": "engineer-app-e84b8",
+    "storage_bucket": "engineer-app-e84b8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:534325840294:android:535f690a8cd42bd67d6767",
+        "android_client_info": {
+          "package_name": "com.example.engineer_app_frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDh0GmCLTmEksYfu87qYJZ-3MC0aIC1qqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
