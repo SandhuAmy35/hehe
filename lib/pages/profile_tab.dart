@@ -41,31 +41,77 @@ class _ProfileTabState extends State<ProfileTab> {
   void _logout() async {
     await _auth.signOut();
     if (context.mounted) {
-      Navigator.of(context).pushReplacementNamed('/login'); // Adjust this route
+      Navigator.of(context).pushReplacementNamed('/login'); // Adjust as needed
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          const Icon(Icons.account_circle, size: 80, color: Colors.blue),
-          const SizedBox(height: 10),
-          Text("Email: $email", style: const TextStyle(fontSize: 16)),
-          const SizedBox(height: 10),
-          Text("Claimed Tasks: $claimedTasks", style: const TextStyle(fontSize: 16)),
-          const SizedBox(height: 20),
-          ElevatedButton.icon(
-            onPressed: _logout,
-            icon: const Icon(Icons.logout),
-            label: const Text("Logout"),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Engineer Profile', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            // Profile avatar
+            CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.deepPurple[100],
+              child: const Icon(Icons.person, size: 60, color: Colors.deepPurple),
             ),
-          ),
-        ],
+            const SizedBox(height: 16),
+
+            // Email
+            Text(email,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+
+            const Text("Maintenance Engineer",
+                style: TextStyle(fontSize: 16, color: Colors.grey)),
+            const SizedBox(height: 30),
+
+            // Claimed tasks card
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("Claimed Tasks",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                    Text("$claimedTasks",
+                        style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.deepPurple)),
+                  ],
+                ),
+              ),
+            ),
+            const Spacer(),
+
+            // Logout button
+            ElevatedButton.icon(
+              onPressed: _logout,
+              icon: const Icon(Icons.logout),
+              label: const Text("Logout"),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+                backgroundColor: Theme.of(context).colorScheme.errorContainer,
+                foregroundColor: Theme.of(context).colorScheme.onErrorContainer,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'pages/report_detail_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -7,81 +8,95 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 👋 Title
               const Text(
-                'Engineer Dashboard',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                '🚧 InfraCare Engineer',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              const SizedBox(height: 12),
-
-              // 📊 Infrastructure Health Pie Charts
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  _PieChartCard(title: 'Bridges', percent: 70),
-                  _PieChartCard(title: 'Roads', percent: 50),
-                  _PieChartCard(title: 'Pipes', percent: 85),
-                ],
+              const SizedBox(height: 8),
+              const Text(
+                'Predict. Prevent. Preserve.',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
-
               const SizedBox(height: 24),
 
-              // 📝 Recent Reports Section
+              // Infrastructure Health Overview
+              const Text(
+                'Infrastructure Health Overview',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  _PieCard(title: 'Potholes', percentage: 40, color: Colors.orange),
+                  _PieCard(title: 'Cracks', percentage: 25, color: Colors.red),
+                  _PieCard(title: 'Stable', percentage: 35, color: Colors.green),
+                ],
+              ),
+              const SizedBox(height: 24),
+
+              // Recent Reports
               const Text(
                 'Recent Reports',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 12),
 
-              SizedBox(
-                height: 180,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: const [
-                    _ReportCard(
-                      title: "Pothole - Sector 9",
-                      imageUrl: "https://via.placeholder.com/150",
-                      severity: "High",
+              _RecentReportCard(
+                imageUrl: 'https://i.imgur.com/Fh7XVYY.jpg',
+                title: 'Bridge Crack - Sector 21',
+                severity: 'High',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ReportDetailPage(
+                        report: {
+                          'imageUrl': 'https://i.imgur.com/Fh7XVYY.jpg',
+                          'title': 'Bridge Crack - Sector 21',
+                          'severity': 'High',
+                          'location': 'Sector 21, City A',
+                          'status': 'Unclaimed',
+                          'description': 'Large crack on bridge pillar causing structural concerns.',
+                          'prediction': 'Could lead to collapse in 2 weeks if ignored.',
+                        },
+                      ),
                     ),
-                    _ReportCard(
-                      title: "Crack on Bridge",
-                      imageUrl: "https://via.placeholder.com/150",
-                      severity: "Medium",
-                    ),
-                    _ReportCard(
-                      title: "Corroded Pipe",
-                      imageUrl: "https://via.placeholder.com/150",
-                      severity: "Low",
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
 
-              const SizedBox(height: 24),
-
-              // 🔗 Navigation Shortcuts
-              const Text(
-                'Quick Access',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 12),
-
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: [
-                  _NavButton(label: 'AI Analysis', icon: Icons.analytics, onTap: () {/* TODO */}),
-                  _NavButton(label: 'Sensors', icon: Icons.sensors, onTap: () {/* TODO */}),
-                  _NavButton(label: 'Map', icon: Icons.map, onTap: () {/* TODO */}),
-                  _NavButton(label: 'Tasks', icon: Icons.task, onTap: () {/* TODO */}),
-                ],
+              _RecentReportCard(
+                imageUrl: 'https://i.imgur.com/JbM2kQo.jpg',
+                title: 'Pothole - Main Road',
+                severity: 'Medium',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ReportDetailPage(
+                        report: {
+                          'imageUrl': 'https://i.imgur.com/JbM2kQo.jpg',
+                          'title': 'Pothole - Main Road',
+                          'severity': 'Medium',
+                          'location': 'Main Road, City B',
+                          'status': 'Unclaimed',
+                          'description': 'Medium-sized pothole causing vehicle damage.',
+                          'prediction': 'Worsening expected in 4 days due to rains.',
+                        },
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -91,106 +106,103 @@ class HomePage extends StatelessWidget {
   }
 }
 
-// 🌈 Pie Chart Widget
-class _PieChartCard extends StatelessWidget {
+class _PieCard extends StatelessWidget {
   final String title;
-  final double percent;
+  final int percentage;
+  final Color color;
 
-  const _PieChartCard({required this.title, required this.percent});
+  const _PieCard({
+    required this.title,
+    required this.percentage,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          width: 80,
-          height: 80,
-          child: PieChart(
-            PieChartData(
-              sections: [
-                PieChartSectionData(
-                  color: Colors.blue,
-                  value: percent,
-                  showTitle: false,
-                  radius: 25,
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Container(
+        width: 100,
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 60,
+              width: 60,
+              child: PieChart(
+                PieChartData(
+                  sections: [
+                    PieChartSectionData(
+                      value: percentage.toDouble(),
+                      color: color,
+                      radius: 25,
+                      showTitle: false,
+                    ),
+                    PieChartSectionData(
+                      value: (100 - percentage).toDouble(),
+                      color: Colors.grey.shade200,
+                      radius: 25,
+                      showTitle: false,
+                    ),
+                  ],
+                  sectionsSpace: 0,
+                  centerSpaceRadius: 18,
                 ),
-                PieChartSectionData(
-                  color: Colors.grey[300],
-                  value: 100 - percent,
-                  showTitle: false,
-                  radius: 25,
-                ),
-              ],
-              centerSpaceRadius: 18,
+              ),
             ),
-          ),
+            const SizedBox(height: 8),
+            Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+            Text('$percentage%', style: const TextStyle(color: Colors.grey)),
+          ],
         ),
-        const SizedBox(height: 8),
-        Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-      ],
+      ),
     );
   }
 }
 
-// 📝 Report Card Widget
-class _ReportCard extends StatelessWidget {
-  final String title;
+class _RecentReportCard extends StatelessWidget {
   final String imageUrl;
+  final String title;
   final String severity;
-
-  const _ReportCard({required this.title, required this.imageUrl, required this.severity});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 160,
-      margin: const EdgeInsets.only(right: 12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: Image.network(imageUrl, height: 100, width: double.infinity, fit: BoxFit.cover),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, maxLines: 2, overflow: TextOverflow.ellipsis),
-                const SizedBox(height: 4),
-                Text("Severity: $severity", style: const TextStyle(color: Colors.red)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// 🚀 Navigation Button Widget
-class _NavButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
   final VoidCallback onTap;
 
-  const _NavButton({required this.label, required this.icon, required this.onTap});
+  const _RecentReportCard({
+    required this.imageUrl,
+    required this.title,
+    required this.severity,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Chip(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-        avatar: Icon(icon, size: 20),
-        label: Text(label),
-        backgroundColor: Colors.blue[50],
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                bottomLeft: Radius.circular(16),
+              ),
+              child: Image.network(
+                imageUrl,
+                width: 100,
+                height: 90,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Expanded(
+              child: ListTile(
+                title: Text(title),
+                subtitle: Text('Severity: $severity'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

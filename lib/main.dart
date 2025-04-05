@@ -5,19 +5,31 @@ import 'auth_gate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home_page.dart';
 
+// ✅ Supabase
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 // Internal pages
 import 'pages/reports_page.dart';
 import 'pages/ai_analysis_page.dart';
 import 'pages/sensor_data_page.dart';
 import 'pages/map_page.dart';
 import 'pages/task_status_page.dart';
-import 'pages/profile_tab.dart'; // ✅ Added
+import 'pages/profile_tab.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // ✅ Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // ✅ Initialize Supabase
+  await Supabase.initialize(
+    url: 'https://jvdxiugewixohnxgzten.supabase.co', // 🔁 Replace this
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2ZHhpdWdld2l4b2hueGd6dGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM4MzE1MzksImV4cCI6MjA1OTQwNzUzOX0.uv8cCXrb-IrniXnSwn3bRgyq3uHE3K0I2WcayWsXyxI',       // 🔁 Replace this
+  );
+
   runApp(const EngineerApp());
 }
 
@@ -29,7 +41,7 @@ class EngineerApp extends StatelessWidget {
     return MaterialApp(
       title: 'Engineer App',
       theme: ThemeData(
-        useMaterial3: true, // ✅ Material 3
+        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         scaffoldBackgroundColor: Colors.grey[50],
         appBarTheme: const AppBarTheme(
@@ -62,7 +74,7 @@ class _EngineerHomePageState extends State<EngineerHomePage> {
     SensorDataPage(),
     MapPage(),
     TaskStatusPage(),
-    ProfileTab(), // ✅ Profile tab
+    ProfileTab(),
   ];
 
   void _onItemTapped(int index) {
@@ -97,7 +109,7 @@ class _EngineerHomePageState extends State<EngineerHomePage> {
           NavigationDestination(icon: Icon(Icons.sensors), label: 'Sensors'),
           NavigationDestination(icon: Icon(Icons.map), label: 'Map'),
           NavigationDestination(icon: Icon(Icons.task), label: 'Tasks'),
-          NavigationDestination(icon: Icon(Icons.person), label: 'Profile'), // ✅
+          NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );
